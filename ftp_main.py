@@ -7,3 +7,4 @@ from ftplib import FTP
 print("Scott Haligowski")
 print("My own FTP client")
 print("2020")
+print('v0.1.1')
