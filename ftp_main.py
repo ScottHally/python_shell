@@ -21,6 +21,6 @@ command = input('>>>')
 while(command != 'quit'):
 	funcs.parse_command(command)
 	command = input('>>>')
-if(funcs.ftp is not None):
-	funcs.ftp.quit()
+if(funcs.g_ftp is not None):
+	funcs.g_ftp.quit()
 
