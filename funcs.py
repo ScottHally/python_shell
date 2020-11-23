@@ -1,6 +1,7 @@
 from ftplib import FTP
 import getpass
 
+g_ftp = 0
 def parse_command(command):
 	tokens = command.split(' ')
 	print('Parsing command: ' + command)
@@ -13,6 +14,8 @@ def parse_command(command):
 
 def cmd_get(tokens):
 	print('Processing GET command...')
+	with open(tokens[1], 'wb') as fp:
+		print(g_ftp.retrbinary('RETR ' + tokens[1], fp.write))
 	return None
 
 def connect():
@@ -33,4 +36,6 @@ def connect():
 	except:
 		print("Invalid credentials")
 	print(login)
-	return ftp
+
+	global g_ftp
+	g_ftp = ftp

@@ -17,10 +17,10 @@ print('v0.1.2')
 #with open('hello','wb') as fp:
 #	ftp.retrbinary('RETR hello',fp.write)
 command = input('>>>')
-ftp = None
+
 while(command != 'quit'):
-	ftp = funcs.parse_command(command)
+	funcs.parse_command(command)
 	command = input('>>>')
-if(ftp is not None):
-	ftp.quit()
+if(funcs.ftp is not None):
+	funcs.ftp.quit()
 
