@@ -1,5 +1,6 @@
 from ftplib import FTP
 import getpass
+import funcs
 #test
 #ftp = FTP('10.0.0.235') 
 #my local IP, using windows FTP server
@@ -7,31 +8,19 @@ import getpass
 print("Scott Haligowski")
 print("My own FTP client")
 print("2020")
-print('v0.1.1')
+print('v0.1.2')
 
-print('\nEnter host IP or address:')
-hostname = input()
-print("Connecting to " + hostname + "...")
-try:
-	ftp = FTP(hostname)
-except:
-	print("Could not connect to specified host. Quiting.")
-	exit()
 
-username = input("Username:")
-passwd = getpass.getpass('Password:')
 
-try:
-	login = ftp.login(username, passwd)
-except:
-	print("Invalid credentials")
-print(login)
 
 #test
 #with open('hello','wb') as fp:
 #	ftp.retrbinary('RETR hello',fp.write)
 command = input('>>>')
+ftp = None
 while(command != 'quit'):
+	ftp = funcs.parse_command(command)
 	command = input('>>>')
-ftp.quit()
+if(ftp is not None):
+	ftp.quit()
 
