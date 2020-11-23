@@ -2,6 +2,7 @@ from ftplib import FTP
 import getpass
 import fileinput
 import sys
+import os
 
 g_ftp = None
 def parse_command(command):
@@ -12,9 +13,30 @@ def parse_command(command):
 		ret = cmd_get(tokens)
 	elif(tokens[0].upper() == 'CONNECT'):
 		ret = connect()
+	elif(tokens[0].upper() == 'PUT'):
+		ret = cmd_put(tokens)
+	elif(tokens[0].upper() == 'LS'):
+		ret = cmd_ls(tokens)
+	elif(tokens[0].upper() == 'LLS'):
+		ret = cmd_lls(tokens)
 	else:
 		ret = -1
 	return ret
+
+def cmd_lls(tokens):
+	print('Listing local directory contents')
+	#print(os.scandir())
+	for file in os.scandir():
+		print(file.name)
+
+	return None
+
+def cmd_ls(tokens):
+	print('Listing remote directory contents...')
+	if(g_ftp is not None):
+		print(g_ftp.retrlines('LIST'))
+	else:
+		print('Not connected to an FTP server. No directory to list')
 
 def cmd_get(tokens):
 	print('Processing GET command...')
@@ -27,6 +49,24 @@ def cmd_get(tokens):
 					print("Could not find file specified")
 		else:
 			print("Usage: GET filename")
+	else:
+		print("Connect to a valid FTP server before issuing commands")
+	return None
+
+def cmd_put(tokens):
+	print('Processing PUT command...')
+	if(g_ftp is not None):
+		if(len(tokens) > 1):
+			try:
+				with open(tokens[1], 'rb') as fp:
+					try:
+						print(g_ftp.storbinary('STOR ' + tokens[1], fp))
+					except:
+						print("Could not find file specified")
+			except:
+				print("No file \"" + tokens[1] + "\" found in local directory")
+		else:
+			print("Usage: PUT filename")
 	else:
 		print("Connect to a valid FTP server before issuing commands")
 	return None
@@ -51,6 +91,7 @@ def connect():
 			print("Invalid credentials")
 			exit()
 	else:
+		print("Login script detected. Using credentials...")
 		filein = fileinput.FileInput(files=(sys.argv[1]))
 		print('\nEnter host IP or address:')
 		hostname = filein.readline()[:-1]
