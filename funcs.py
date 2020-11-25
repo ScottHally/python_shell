@@ -3,6 +3,8 @@ import getpass
 import fileinput
 import sys
 import os
+import stat
+import time
 
 g_ftp = None
 def parse_command(command):
@@ -26,9 +28,16 @@ def parse_command(command):
 def cmd_lls(tokens):
 	print('Listing local directory contents')
 	#print(os.scandir())
+	print('Mode\t\tLastWriteTIme\t\tLength Name')
+	print('----\t\t-------------\t\t------ ----')
 	for file in os.scandir():
-		print(file.name)
+		#print(file.stat().st_mode+'\t\t'+str(file.stat().st_mtime))
 
+		mode = file.stat().st_mode
+		mod_time = file.stat().st_ctime
+		print(stat.filemode(mode)+'\t', end='')
+		strtime = time.gmtime(mod_time)
+		print(time.strftime('%Y-%m-%d  %I:%M %p', strtime))
 	return None
 
 def cmd_ls(tokens):

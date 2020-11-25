@@ -8,7 +8,7 @@ import funcs
 print("Scott Haligowski")
 print("My own FTP client")
 print("2020")
-print('v0.1.3')
+print('v0.1.4')
 
 
 
