@@ -25,19 +25,28 @@ def parse_command(command):
 		ret = -1
 	return ret
 
+
+#pretty good!
 def cmd_lls(tokens):
+
+	# use method format() for fancy formatting strings
 	print('Listing local directory contents')
 	#print(os.scandir())
-	print('Mode\t\tLastWriteTIme\t\tLength Name')
-	print('----\t\t-------------\t\t------ ----')
+	print('Mode\t\t       LastWriteTime\t\tLength Name')
+	print('----\t\t       -------------\t\t------ ----')
 	for file in os.scandir():
 		#print(file.stat().st_mode+'\t\t'+str(file.stat().st_mtime))
 
 		mode = file.stat().st_mode
-		mod_time = file.stat().st_ctime
+		mod_time = file.stat().st_mtime
+		length = file.stat().st_size
+		name = file.name
 		print(stat.filemode(mode)+'\t', end='')
-		strtime = time.gmtime(mod_time)
-		print(time.strftime('%Y-%m-%d  %I:%M %p', strtime))
+		strtime = time.localtime(mod_time)
+		print(time.strftime('%Y-%m-%d  %I:%M %p', strtime)+'\t\t', end='')
+		print('{:>6}'.format(str(length)), end=' ')
+		print(name)
+
 	return None
 
 def cmd_ls(tokens):
